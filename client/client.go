@@ -7,13 +7,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"time"
+
 	"github.com/go-chain/go-tron"
 	"github.com/go-chain/go-tron/abi"
 	"github.com/go-chain/go-tron/account"
 	"github.com/go-chain/go-tron/address"
-	"io/ioutil"
-	"net/http"
-	"time"
 )
 
 type Client struct {
@@ -82,7 +83,7 @@ func (c *Client) GetBlockByHeight(n uint64) (*tron.Block, error) {
 	}
 
 	if block.Id == "" {
-		return nil, fmt.Errorf("block num: %d not exist",n)
+		return nil, fmt.Errorf("block num: %d not exist", n)
 	}
 
 	return &block, nil
@@ -118,7 +119,9 @@ func (c *Client) GetBlockRange(start, end uint64) ([]tron.Block, error) {
 		End:   end,
 	}
 
-	var response = struct{ Blocks []tron.Block `json:"block"` }{}
+	var response = struct {
+		Blocks []tron.Block `json:"block"`
+	}{}
 	if err := c.post("wallet/getblockbylimitnext", &request, &response); err != nil {
 		return nil, err
 	}
@@ -134,7 +137,9 @@ func (c *Client) GetLatestBlocks(n int) ([]tron.Block, error) {
 		Num: n,
 	}
 
-	var response = struct{ Blocks []tron.Block `json:"block"` }{}
+	var response = struct {
+		Blocks []tron.Block `json:"block"`
+	}{}
 	if err := c.post("wallet/getblockbylatestnum", &request, &response); err != nil {
 		return nil, err
 	}
@@ -240,7 +245,7 @@ func (c *Client) Transfer(src account.Account, dest address.Address, amount uint
 
 }
 
-//TransferAsset trc10
+// TransferAsset trc10
 func (c *Client) TransferAsset(src account.Account, dest address.Address, assetName string, amount uint64) (tron.Transaction, error) {
 	var request = struct {
 		Owner  string `json:"owner_address"`
@@ -292,6 +297,29 @@ func (c *Client) TransactionInfoById(id string) (*TransactionInfo, error) {
 	}
 
 	return &info, nil
+}
+
+func (c *Client) TransactionInfoByBlockNum(n uint64) ([]TransactionInfo, error) {
+	var request = struct {
+		Num uint64 `json:"num"`
+	}{
+		Num: n,
+	}
+
+	var info []TransactionInfo
+	if err := c.post("wallet/gettransactioninfobyblocknum", &request, &info); err != nil {
+		return nil, err
+	}
+
+	// Check each TransactionInfo in the slice.
+	for _, tx := range info {
+		// Transactions that exist will always have an identifier returned.
+		if tx.Id == "" {
+			return nil, errors.New("tx id is null, unconfirmed transaction")
+		}
+	}
+
+	return info, nil
 }
 
 // TransactionById returns the transaction for the provided id.
