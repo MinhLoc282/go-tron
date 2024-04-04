@@ -5,8 +5,9 @@ import (
 	"crypto/ecdsa"
 	"crypto/rand"
 	"fmt"
-	"github.com/go-chain/go-tron"
-	"github.com/go-chain/go-tron/address"
+
+	"github.com/MinhLoc282/go-tron"
+	"github.com/MinhLoc282/go-tron/address"
 	"github.com/btcsuite/btcd/btcec"
 	"github.com/ethereum/go-ethereum/crypto"
 )
@@ -42,9 +43,8 @@ func NewLocalAccount() *LocalAccount {
 }
 
 func (a *LocalAccount) PrivateKey() string {
-	return fmt.Sprintf("%x",a.priv.D.Bytes())
+	return fmt.Sprintf("%x", a.priv.D.Bytes())
 }
-
 
 // FromPrivateKeyHex derives an account from a hexadecimal private key string.
 func FromPrivateKeyHex(hex string) (*LocalAccount, error) {

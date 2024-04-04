@@ -11,10 +11,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/go-chain/go-tron"
-	"github.com/go-chain/go-tron/abi"
-	"github.com/go-chain/go-tron/account"
-	"github.com/go-chain/go-tron/address"
+	"github.com/MinhLoc282/go-tron"
+	"github.com/MinhLoc282/go-tron/abi"
+	"github.com/MinhLoc282/go-tron/account"
+	"github.com/MinhLoc282/go-tron/address"
 )
 
 type Client struct {
