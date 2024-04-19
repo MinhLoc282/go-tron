@@ -78,7 +78,7 @@ func (c *Client) GetBlockByHeight(n uint64) (*tron.Block, error) {
 	}
 
 	var block tron.Block
-	if err := c.post("wallet/getblockbynum", &request, &block); err != nil {
+	if err := c.post("walletsolidty/getblockbynum", &request, &block); err != nil {
 		return nil, err
 	}
 
@@ -152,7 +152,7 @@ func (c *Client) GetLatestBlock() (tron.Block, error) {
 	var request = struct{}{}
 
 	var block tron.Block
-	if err := c.post("wallet/getnowblock", &request, &block); err != nil {
+	if err := c.post("walletsolidty/getnowblock", &request, &block); err != nil {
 		return tron.Block{}, err
 	}
 
@@ -307,7 +307,7 @@ func (c *Client) TransactionInfoByBlockNum(n uint64) ([]TransactionInfo, error) 
 	}
 
 	var info []TransactionInfo
-	if err := c.post("wallet/gettransactioninfobyblocknum", &request, &info); err != nil {
+	if err := c.post("walletsolidty/gettransactioninfobyblocknum", &request, &info); err != nil {
 		return nil, err
 	}
 
