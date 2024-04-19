@@ -152,7 +152,7 @@ func (c *Client) GetLatestBlock() (tron.Block, error) {
 	var request = struct{}{}
 
 	var block tron.Block
-	if err := c.post("wallet/getnowblock", &request, &block); err != nil {
+	if err := c.post("walletsolidity/getnowblock", &request, &block); err != nil {
 		return tron.Block{}, err
 	}
 
