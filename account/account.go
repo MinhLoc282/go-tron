@@ -8,7 +8,7 @@ import (
 
 	"github.com/MinhLoc282/go-tron"
 	"github.com/MinhLoc282/go-tron/address"
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
